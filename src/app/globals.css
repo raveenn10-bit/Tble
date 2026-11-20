@@ -1,0 +1,139 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    background-color: #F8FAFC;
+    color: #0F172A;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+}
+
+/* Custom scrollbar for touch POS */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #CBD5E1;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94A3B8;
+}
+
+/* Browser Print Styles for 58mm, 80mm Thermal & A4 */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  #printable-receipt,
+  #printable-receipt *,
+  #printable-kot,
+  #printable-kot *,
+  #printable-report,
+  #printable-report * {
+    visibility: visible;
+  }
+  #printable-receipt,
+  #printable-kot,
+  #printable-report {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  .no-print {
+    display: none !important;
+  }
+}
+
+/* ─────────────── Motion & micro-interactions ─────────────── */
+@keyframes pop-in {
+  from { opacity: 0; transform: scale(0.6); }
+  to   { opacity: 1; transform: scale(1); }
+}
+@keyframes ring-pulse {
+  0%   { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.55); }
+  70%  { box-shadow: 0 0 0 12px rgba(245, 158, 11, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0); }
+}
+@keyframes urgent-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.45); }
+  50%      { box-shadow: 0 0 0 6px rgba(220, 38, 38, 0); }
+}
+@keyframes dot-ping {
+  75%, 100% { transform: scale(2.2); opacity: 0; }
+}
+
+.animate-pop-in {
+  animation: pop-in 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
+}
+.animate-ring-pulse {
+  animation: ring-pulse 1.8s ease-out infinite;
+}
+.animate-urgent {
+  animation: urgent-pulse 1.4s ease-in-out infinite;
+}
+.dot-live {
+  position: relative;
+}
+.dot-live::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  background: inherit;
+  animation: dot-ping 1.6s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+/* Tactile press feedback on every button (touch POS feel) */
+button:not(:disabled) {
+  /* transform intentionally excluded: Motion drives transforms on animated buttons */
+  transition-property: color, background-color, border-color, box-shadow, opacity;
+  transition-duration: 160ms;
+  transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+}
+button:not(:disabled):active {
+  transform: scale(0.96);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@keyframes rise-in {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+/* Panels of a page cascade in */
+.page-stagger > * > * {
+  animation: rise-in 0.5s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+}
+.page-stagger > * > *:nth-child(2) { animation-delay: 70ms; }
+.page-stagger > * > *:nth-child(3) { animation-delay: 140ms; }
+.page-stagger > * > *:nth-child(4) { animation-delay: 210ms; }
+.page-stagger > * > *:nth-child(n + 5) { animation-delay: 260ms; }
+/* Table rows & list items cascade in */
+.page-stagger tbody tr {
+  animation: rise-in 0.4s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+  transition: background-color 150ms ease;
+}
+.page-stagger tbody tr:hover { background-color: rgb(248 250 252); }
+.page-stagger tbody tr:nth-child(1) { animation-delay: 150ms; }
+.page-stagger tbody tr:nth-child(2) { animation-delay: 180ms; }
+.page-stagger tbody tr:nth-child(3) { animation-delay: 210ms; }
+.page-stagger tbody tr:nth-child(4) { animation-delay: 240ms; }
+.page-stagger tbody tr:nth-child(5) { animation-delay: 270ms; }
+.page-stagger tbody tr:nth-child(6) { animation-delay: 300ms; }
+.page-stagger tbody tr:nth-child(7) { animation-delay: 330ms; }
+.page-stagger tbody tr:nth-child(8) { animation-delay: 360ms; }
+.page-stagger tbody tr:nth-child(n + 9) { animation-delay: 390ms; }
